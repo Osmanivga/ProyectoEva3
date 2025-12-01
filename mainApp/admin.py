@@ -24,3 +24,46 @@ class ProductoAdmin(admin.ModelAdmin):
     mostrar_imagen.short_description = "Portada"
 
 
+
+@admin.register(Insumo)
+class InsumoAdmin(admin.ModelAdmin):
+    list_display = ("nombre", "tipo", "cantidad", "unidad", "marca", "color")
+    search_fields = ("nombre", "tipo", "marca")
+    list_filter = ("tipo",)
+    list_editable = ("cantidad",)
+
+class ImagenReferenciaInline(admin.TabularInline):
+    model = ImagenReferencia
+    extra = 1 
+
+
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    list_display = (
+        "id", 
+        "cliente_nombre", 
+        "producto_referencia",
+        "estado_pedido", 
+        "estado_pago", 
+        "plataforma", 
+        "fecha_solicitada"
+    )
+    search_fields = ("cliente_nombre", "email", "id", "token")
+    list_filter = ("estado_pedido", "estado_pago", "plataforma", "fecha_creacion")
+    
+    inlines = [ImagenReferenciaInline]
+    
+    readonly_fields = ("token", "fecha_creacion")
+    
+    
+    fieldsets = (
+        ("Información del Cliente", {
+            "fields": ("cliente_nombre", "email", "telefono", "red_social")
+        }),
+        ("Detalles del Pedido", {
+            "fields": ("producto_referencia", "descripcion_solicitud", "fecha_solicitada")
+        }),
+        ("Estado y Seguimiento", {
+            "fields": ("estado_pedido", "estado_pago", "plataforma", "token", "fecha_creacion")
+        }),
+    )
