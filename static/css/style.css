@@ -1,0 +1,53 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #d9dceb 0%, #1c1c1d 100%);
+}
+
+/* Ajuste para que las imágenes de las tarjetas se vean uniformes */
+.card-img-top {
+    height: 200px;
+    object-fit: contain;
+    padding: 10px;
+    background-color: white;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+}
+
+/* ... (el resto de tu CSS anterior) ... */
+
+/* 1. Estilo para el BOTÓN DEL MEDIO (Solicitar Pedido) */
+.btn-principal {
+    background-color: #0066ff; /* Color de fondo (Naranja ejemplo) */
+    border-color: #0066ff;     /* Color del borde */
+    color: white;              /* Color del texto */
+    font-weight: bold;
+    transition: all 0.3s ease; /* Suaviza la animación */
+}
+
+/* Efecto al pasar el mouse por encima (Hover) */
+.btn-principal:hover {
+    background-color: #5a81d4; /* Un tono más oscuro */
+    border-color: #6677c4;
+    transform: scale(1.05);    /* Efecto de agrandarse un poquito */
+}
+
+/* 2. Estilo para el BOTÓN VER DETALLES / MÁS INFO */
+.btn-detalles {
+    color: #000000;            /* Color del texto (Morado ejemplo) */
+    border-color: #000000;     /* Color del borde */
+    background-color: rgba(163, 158, 158, 0.082);   /* Fondo transparente o blanco */
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+.btn-detalles:hover {
+    background-color: #d9dceb; /* El fondo se llena del color */
+    color: rgb(0, 0, 0);              /* El texto se vuelve blanco */
+}

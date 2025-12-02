@@ -39,7 +39,8 @@
                 </div>
                 <div class="card-footer bg-white border-0 pb-3">
                     <div class="d-grid gap-2">
-                        <a href="{% url 'mainApp:detalle_producto' prod.id %}" class="btn btn-outline-secondary btn-sm">Más info</a>
+                        <a href="{% url 'mainApp:detalle_producto' prod.id %}" class="btn btn-detalles btn-sm">Más info</a>
+                        
                         <a href="{% url 'mainApp:solicitar_pedido' %}?producto={{ prod.id }}" class="btn btn-success btn-sm">Solicitar</a>
                     </div>
                 </div>
