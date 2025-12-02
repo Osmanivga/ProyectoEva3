@@ -1,0 +1,48 @@
+{% extends 'mainApp/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalogo' %}">Catálogo</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre }}</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow-lg border-0 overflow-hidden">
+        <div class="row g-0">
+            <!-- Galería de Imágenes -->
+            <div class="col-md-6 bg-light text-center p-4">
+                {% if producto.imagen1 %}
+                    <img src="{{ producto.imagen1.url }}" class="img-fluid rounded shadow-sm mb-3" style="max-height: 400px;">
+                {% endif %}
+                
+                <div class="d-flex justify-content-center gap-2 mt-2">
+                    {% if producto.imagen2 %}
+                        <img src="{{ producto.imagen2.url }}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% endif %}
+                    {% if producto.imagen3 %}
+                        <img src="{{ producto.imagen3.url }}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Información -->
+            <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
+                <span class="badge bg-secondary w-auto align-self-start mb-2">{{ producto.categoria.nombre }}</span>
+                <h1 class="fw-bold mb-2">{{ producto.nombre }}</h1>
+                <h2 class="text-primary mb-4">${{ producto.precio_base }}</h2>
+                
+                <p class="lead mb-4">{{ producto.descripcion }}</p>
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'solicitar_pedido' %}?producto={{ producto.id }}" class="btn btn-success btn-lg">
+                        Solicitar Personalización
+                    </a>
+                    <a href="{% url 'catalogo' %}" class="btn btn-outline-secondary">Seguir viendo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
