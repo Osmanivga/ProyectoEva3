@@ -1,0 +1,45 @@
+{% extends 'mainApp/base.html' %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold">Bienvenido a Nuestra Tienda</h1>
+    <p class="lead text-muted">Encuentra los mejores productos personalizados aquí.</p>
+    <a href="{% url 'mainApp:solicitar_pedido' %}" class="btn btn-primary btn-lg mt-3">Solicitar Pedido Personalizado</a>
+</div>
+
+<h3 class="mb-4">Productos Destacados</h3>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for producto in productos_destacados %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if producto.imagen1 %}
+                <img src="{{ producto.imagen1.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+            {% else %}
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white">
+                    <span>Sin Imagen</span>
+                </div>
+            {% endif %}
+            
+            <div class="card-body">
+                <h5 class="card-title">{{ producto.nombre }}</h5>
+                <p class="card-text text-truncate">{{ producto.descripcion }}</p>
+                <p class="text-primary fw-bold fs-5">${{ producto.precio_base }}</p>
+            </div>
+            
+            <div class="card-footer bg-white border-0 pb-3">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'mainApp:detalle_producto' producto.id %}" class="btn btn-outline-primary">Ver Detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            No hay productos destacados disponibles en este momento.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
