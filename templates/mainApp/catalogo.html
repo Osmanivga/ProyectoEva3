@@ -4,9 +4,8 @@
 <div class="container mt-4">
     <h1 class="text-center mb-4">Catálogo Completo</h1>
 
-    <!-- Filtros de Categoría -->
     <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
-        <a href="{% url 'catalogo' %}" 
+        <a href="{% url 'mainApp:catalogo' %}" 
            class="btn {% if not categoria_actual %}btn-dark{% else %}btn-outline-dark{% endif %} rounded-pill px-4">
            Todo
         </a>
@@ -18,7 +17,6 @@
         {% endfor %}
     </div>
 
-    <!-- Lista de Productos -->
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
         {% for prod in productos %}
         <div class="col">
@@ -41,8 +39,8 @@
                 </div>
                 <div class="card-footer bg-white border-0 pb-3">
                     <div class="d-grid gap-2">
-                        <a href="{% url 'detalle_producto' prod.id %}" class="btn btn-outline-secondary btn-sm">Más info</a>
-                        <a href="{% url 'solicitar_pedido' %}?producto={{ prod.id }}" class="btn btn-success btn-sm">Solicitar</a>
+                        <a href="{% url 'mainApp:detalle_producto' prod.id %}" class="btn btn-outline-secondary btn-sm">Más info</a>
+                        <a href="{% url 'mainApp:solicitar_pedido' %}?producto={{ prod.id }}" class="btn btn-success btn-sm">Solicitar</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +48,7 @@
         {% empty %}
         <div class="col-12 text-center py-5">
             <h3 class="text-muted">No se encontraron productos en esta categoría.</h3>
-            <a href="{% url 'catalogo' %}" class="btn btn-link">Ver todo el catálogo</a>
+            <a href="{% url 'mainApp:catalogo' %}" class="btn btn-link">Ver todo el catálogo</a>
         </div>
         {% endfor %}
     </div>

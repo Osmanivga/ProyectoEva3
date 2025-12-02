@@ -1,0 +1,65 @@
+{% extends "mainApp/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Seguimiento de tu Pedido</h2>
+
+    <div class="card shadow border-0">
+        <div class="card-body p-4">
+            
+            <h4 class="mb-3">Estado Actual</h4>
+            <div class="alert {% if pedido.estado_pedido == 'CANCELADA' %}alert-danger{% else %}alert-info{% endif %}">
+                Estado: <strong>{{ pedido.get_estado_pedido_display }}</strong>
+            </div>
+            
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Información del Pedido</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>ID:</strong> #{{ pedido.id }}</li>
+                        <li class="list-group-item"><strong>Cliente:</strong> {{ pedido.cliente_nombre }}</li>
+                        <li class="list-group-item"><strong>Email:</strong> {{ pedido.email }}</li>
+                        <li class="list-group-item"><strong>Pago:</strong> {{ pedido.get_estado_pago_display }}</li>
+                        <li class="list-group-item"><strong>Fecha:</strong> {{ pedido.fecha_creacion|date:"d/m/Y H:i" }}</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>Detalle de Solicitud</h4>
+                    <div class="p-3 bg-light rounded h-100">
+                        <p><strong>Producto Base:</strong> {{ pedido.producto_referencia.nombre|default:"Ninguno" }}</p>
+                        <p><strong>Descripción:</strong></p>
+                        <p>{{ pedido.descripcion_solicitud }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h4>Imágenes de Referencia</h4>
+            {% if imagenes_referencia %}
+                <div class="row g-3 mt-2">
+                    {% for img in imagenes_referencia %}
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100">
+                                <img src="{{ img.imagen.url }}" class="card-img-top" style="height: 150px; object-fit: cover;">
+                                <div class="card-body p-2 text-center">
+                                    <a href="{{ img.imagen.url }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver grande</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No se adjuntaron imágenes de referencia.</p>
+            {% endif %}
+
+            <div class="text-center mt-5">
+                <a href="{% url 'mainApp:index' %}" class="btn btn-secondary">Volver al Inicio</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

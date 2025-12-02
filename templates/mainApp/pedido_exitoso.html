@@ -1,0 +1,32 @@
+{% extends "mainApp/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card shadow p-5 border-0">
+                <div class="mb-4">
+                    <h1 class="text-success display-1">✅</h1>
+                </div>
+                
+                <h2 class="mb-4">¡Pedido enviado con éxito!</h2>
+
+                <p class="lead">Gracias por enviar tu solicitud, <strong>{{ pedido.cliente_nombre }}</strong>.</p>
+
+                <div class="alert alert-light border mt-4">
+                    <p class="mb-2"><strong>Tu código de seguimiento es:</strong></p>
+                    <h3 class="text-primary font-monospace">{{ pedido.token }}</h3>
+                    <p class="small text-muted mt-2">Guarda este código para revisar el estado de tu pedido.</p>
+                </div>
+
+                <div class="d-grid gap-2 col-md-8 mx-auto mt-4">
+                    <a href="{% url 'mainApp:seguimiento_pedido' token=pedido.token %}" class="btn btn-primary">
+                        Ver Estado del Pedido
+                    </a>
+                    <a href="{% url 'mainApp:index' %}" class="btn btn-outline-dark">Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
