@@ -1,0 +1,58 @@
+{% extends 'mainApp/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Catálogo Completo</h1>
+
+    <!-- Filtros de Categoría -->
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+        <a href="{% url 'catalogo' %}" 
+           class="btn {% if not categoria_actual %}btn-dark{% else %}btn-outline-dark{% endif %} rounded-pill px-4">
+           Todo
+        </a>
+        {% for cat in categorias %}
+        <a href="?categoria={{ cat.id }}" 
+           class="btn {% if categoria_actual == cat.id %}btn-dark{% else %}btn-outline-dark{% endif %} rounded-pill px-4">
+           {{ cat.nombre }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Lista de Productos -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for prod in productos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="position-relative">
+                    {% if prod.imagen1 %}
+                        <img src="{{ prod.imagen1.url }}" class="card-img-top" alt="{{ prod.nombre }}">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                            <span class="text-muted">Sin imagen</span>
+                        </div>
+                    {% endif %}
+                    <span class="position-absolute top-0 end-0 badge bg-primary m-2">{{ prod.categoria.nombre }}</span>
+                </div>
+                
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">{{ prod.nombre }}</h5>
+                    <p class="card-text text-success fw-bold">${{ prod.precio_base }}</p>
+                    <p class="card-text small text-muted">{{ prod.descripcion|truncatechars:60 }}</p>
+                </div>
+                <div class="card-footer bg-white border-0 pb-3">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'detalle_producto' prod.id %}" class="btn btn-outline-secondary btn-sm">Más info</a>
+                        <a href="{% url 'solicitar_pedido' %}?producto={{ prod.id }}" class="btn btn-success btn-sm">Solicitar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <h3 class="text-muted">No se encontraron productos en esta categoría.</h3>
+            <a href="{% url 'catalogo' %}" class="btn btn-link">Ver todo el catálogo</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
