@@ -1,0 +1,20 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Ajuste para que las imágenes de las tarjetas se vean uniformes */
+.card-img-top {
+    height: 200px;
+    object-fit: contain;
+    padding: 10px;
+    background-color: white;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+}
