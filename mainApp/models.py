@@ -98,3 +98,10 @@ class ImagenReferencia(models.Model):
 
     def __str__(self):
         return f"Imagen para pedido {self.pedido.id}"
+    
+
+class employee(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    salary = models.DecimalField(max_digits=10 , decimal_places=2)

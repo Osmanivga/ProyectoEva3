@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 def employeeView(request):
     emp={
-        id: 123,
+        "id": 123,
         "name": "clark",
         "email": "super@gmail.com",
         "salary": "5000"
