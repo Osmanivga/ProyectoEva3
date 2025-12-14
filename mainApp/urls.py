@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from mainApp import views
 
 app_name = 'mainApp'
 
@@ -10,4 +11,7 @@ urlpatterns = [
     path('solicitar/', views.solicitar_pedido, name='solicitar_pedido'),
     path('exito/', views.pedido_exitoso, name='pedido_exitoso'),
     path('seguimiento/<str:token>/', views.seguimiento_pedido, name='seguimiento_pedido'),
+    path("employees/", views.employeeView)
 ]
+
+

@@ -1,6 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Producto, Categoria, Pedido
 from .forms import SolicitudPedidoForm
+from django.http import JsonResponse
+
+def employeeView(request):
+    emp={
+        id: 123,
+        "name": "clark",
+        "email": "super@gmail.com",
+        "salary": "5000"
+    }
+    return JsonResponse(emp)
+
 
 def index(request):
     # Mostramos todos los productos (primeros 6)

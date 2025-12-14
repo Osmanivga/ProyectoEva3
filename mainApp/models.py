@@ -14,7 +14,7 @@ class Producto(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     precio_base = models.IntegerField()  # Usamos Integer para pesos chilenos (sin decimales)
     
- 
+    
     imagen1 = models.ImageField(upload_to='productos/', null=True, blank=True)
     imagen2 = models.ImageField(upload_to='productos/', null=True, blank=True)
     imagen3 = models.ImageField(upload_to='productos/', null=True, blank=True)
@@ -89,8 +89,8 @@ class Pedido(models.Model):
 
     def __str__(self):
         return f"Pedido #{self.id} - {self.cliente_nombre}"
-    
-    
+
+
 
 class ImagenReferencia(models.Model):
     pedido = models.ForeignKey(Pedido, related_name='imagenes_referencia', on_delete=models.CASCADE)
