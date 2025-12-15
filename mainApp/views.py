@@ -2,15 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Producto, Categoria, Pedido
 from .forms import SolicitudPedidoForm
 from django.http import JsonResponse
+from .models import employee
 
 def employeeView(request):
-    emp={
-        "id": 123,
-        "name": "clark",
-        "email": "super@gmail.com",
-        "salary": "5000"
-    }
-    return JsonResponse(emp)
+    empledados = employee.objects.all()
+    data= {"employees": list(empledados.values("name", "salary"))}
+ 
+    return JsonResponse(data)
 
 
 def index(request):
