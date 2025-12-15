@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'DJANGO_API',
         'USER': 'root',
-        'PASSWORD': 'pass'
+        'PASSWORD': ''
 
     }
 }
