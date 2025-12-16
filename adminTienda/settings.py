@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 
 
@@ -30,7 +31,7 @@ SECRET_KEY = 'django-insecure-3+xw_fh3tkud@v2t=lmmyr55b0mn0$&xf@u-oz809@za^gmhul
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,12 +94,11 @@ if hasattr(MySQLdb, 'version_info'):
     MySQLdb.__version__ = '2.2.1'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'django_eva4',                  
-        'USER': 'root',
-        'PASSWORD': '',
-    }
+    'default': dj_database_url.config(
+        # Cambia esto por tu conexión local si quieres, o déjalo usar sqlite por defecto si falla mysql
+        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
+        conn_max_age=600
+    )
 }
 
 
