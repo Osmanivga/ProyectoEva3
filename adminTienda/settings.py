@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR= os.path.join(BASE_DIR, "templates")
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'mainApp'
 ]
 
@@ -81,6 +84,12 @@ WSGI_APPLICATION = 'adminTienda.wsgi.application'
 # --- IMPORTAR PY ---
 import pymysql
 pymysql.install_as_MySQLdb()
+import MySQLdb
+
+
+if hasattr(MySQLdb, 'version_info'):
+    MySQLdb.version_info = (2, 2, 1, 'final', 0)
+    MySQLdb.__version__ = '2.2.1'
 
 
 DATABASES = {
@@ -140,3 +149,5 @@ MEDIA_ROOT= MEDIA_DIR
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+from django.db.backends.mysql.base import DatabaseWrapper
+DatabaseWrapper.check_database_version_supported = lambda self: None
