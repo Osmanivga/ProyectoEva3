@@ -12,7 +12,7 @@ from rest_framework import status
 @api_view(["GET", "POST"])
 def student_list(request):
     if request.method == "GET":
-        students = estudiante.obejects.all()
+        students = estudiante.objects.all()
         ser = estudianteSerializers(students, many=True)
         return Response(ser.data)
     
