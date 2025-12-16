@@ -20,8 +20,9 @@ urlpatterns = [
 
     # Rutas API 
     path('reporte/', views.Reporte, name='reporte_dashboard'),
-    path('api/', include(router.urls)),
     path('api/pedidos/filtrar/', views.Pedido_filtrar, name='pedido_filter'),
+    path('api/', include(router.urls)),
+    
 
 
 
