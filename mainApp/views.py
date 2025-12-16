@@ -3,6 +3,54 @@ from .models import Producto, Categoria, Pedido
 from .forms import SolicitudPedidoForm
 from django.http import JsonResponse
 from .models import employee
+from rest_framework .decorators import api_view
+from .models import estudiante
+from rest_framework.response import Response
+from .serializers import estudianteSerializers
+from rest_framework import status
+
+@api_view(["GET", "POST"])
+def student_list(request):
+    if request.method == "GET":
+        students = estudiante.obejects.all()
+        ser = estudianteSerializers(students, many=True)
+        return Response(ser.data)
+    
+    if request.method == "POST":
+        ser = estudianteSerializers(data = request.data)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data, status=status.HTTP_201_CREATED)
+        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET", "PUT", "DELETE"])
+def student_detail(request, pk):
+    try:
+        student = estudiante.objects.get(pk=pk)
+    except:
+        return Response( status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == "GET":
+        ser= estudianteSerializers(student)
+        return Response(ser.data)
+    
+    if request.method == "PUT":
+        ser = estudianteSerializers(student, data=request.data)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data)
+        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+    if request.method == "DELETE":
+        student.delete()
+        return Response( status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
 
 def employeeView(request):
     empledados = employee.objects.all()

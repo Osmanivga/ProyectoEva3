@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'mainApp'
 ]
 
@@ -77,15 +78,15 @@ WSGI_APPLICATION = 'adminTienda.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-# --- IMPORTANTE: Agrega esto arriba ---
+# --- IMPORTAR PY ---
 import pymysql
 pymysql.install_as_MySQLdb()
 
-# --- Configuración de Base de Datos ---
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # <--- Aquí debe decir mysql
-        'NAME': 'DJANGO_API',                  # El nombre que vimos en tu TablePlus
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'DJANGO_API',                  
         'USER': 'root',
         'USER': 'root',
         'PASSWORD': '',
