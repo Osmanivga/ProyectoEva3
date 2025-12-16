@@ -1,25 +1,25 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Producto, Categoria, Pedido
-from .forms import SolicitudPedidoForm
 from django.http import JsonResponse
-from .models import employee
-from rest_framework .decorators import api_view
-from .models import estudiante, Insumo, Pedido
-from rest_framework.response import Response
-from .serializers import estudianteSerializers, InsumoSerializers, PedidoSerializers
-from rest_framework import status
-from rest_framework import mixins, generics
-from rest_framework import viewsets
-import datetime
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Count
 
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status, mixins, generics, viewsets
+
+
+from .models import Producto, Categoria, Pedido, Insumo, employee, estudiante
+from .forms import SolicitudPedidoForm
+from .serializers import estudianteSerializers, InsumoSerializers, PedidoSerializers
+import datetime
+
+
+# --- API VISTAS ---
+
 class InsumoView(viewsets.ModelViewSet):
     queryset = Insumo.objects.all()
     serializer_class = InsumoSerializers
-
-
 
 class PedidoView(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Pedido.objects.all()
@@ -36,8 +36,9 @@ def Pedido_filtrar(request):
 
     if fecha_inicio and fecha_fin:
         try:
-            pedidos =pedidos.filter(fecha_creacion__range=[fecha_inicio, fecha_fin])
-        except: return Response({"error": "Use YYYY-MM-DD"}, status=status.HTTP_400_BAD_REQUEST)
+            pedidos = pedidos.filter(fecha_creacion__range=[fecha_inicio, fecha_fin])
+        except: 
+            return Response({"error": "Use YYYY-MM-DD"}, status=status.HTTP_400_BAD_REQUEST)
 
     if estado:
         pedidos = pedidos.filter(estado_pedido=estado)
@@ -51,6 +52,8 @@ def Pedido_filtrar(request):
     serializer = PedidoSerializers(pedidos, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+# --- REPORTE ---
 
 def es_admin(user):
     return user.is_superuser
@@ -67,9 +70,71 @@ def Reporte(request):
         'productos_top': list(productos_top)
     })
 
+# --- VISTAS DEL NEGOCIO (WEB) ---
 
+def index(request):
+    productos_destacados = Producto.objects.all()[:6]
+    return render(request, 'mainApp/index.html', {'productos_destacados': productos_destacados})
 
+def catalogo(request):
+    productos = Producto.objects.all()
+    categorias = Categoria.objects.all()
+    
+    categoria_id = request.GET.get('categoria')
+    if categoria_id and categoria_id.isdigit():
+        productos = productos.filter(categoria_id=categoria_id)
+        categoria_actual = int(categoria_id)
+    else:
+        categoria_actual = None
+    
+    return render(request, 'mainApp/catalogo.html', {
+        'productos': productos,
+        'categorias': categorias,
+        'categoria_actual': categoria_actual
+    })
 
+def detalle_producto(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    return render(request, 'mainApp/detalle_producto.html', {'producto': producto})
+
+def solicitar_pedido(request):
+    producto_inicial = None
+    if 'producto' in request.GET:
+        prod_id = request.GET.get('producto')
+        if prod_id and prod_id.isdigit():
+            producto_inicial = get_object_or_404(Producto, pk=prod_id)
+
+    if request.method == 'POST':
+        form = SolicitudPedidoForm(request.POST, request.FILES)
+        if form.is_valid():
+            pedido = form.save()
+            request.session['nuevo_token'] = str(pedido.token)
+            return redirect('mainApp:pedido_exitoso')
+    else:
+        form = SolicitudPedidoForm(initial={'producto_referencia': producto_inicial})
+
+    return render(request, 'mainApp/solicitar_pedido.html', {'form': form})
+
+def pedido_exitoso(request):
+    token = request.session.get('nuevo_token')
+    if not token:
+        return redirect('mainApp:index')
+    
+    try:
+        pedido = Pedido.objects.get(token=token)
+    except Pedido.DoesNotExist:
+        return redirect('mainApp:index')
+    
+    return render(request, 'mainApp/pedido_exitoso.html', {'pedido': pedido})
+
+def seguimiento_pedido(request, token):
+    pedido = get_object_or_404(Pedido, token=token)
+    imagenes = pedido.imagenes_referencia.all()
+    
+    return render(request, 'mainApp/seguimiento_pedido.html', {
+        'pedido': pedido, 
+        'imagenes_referencia': imagenes
+    })
 
 
 
@@ -161,75 +226,4 @@ def employeeView(request):
     return JsonResponse(data)
 
 '''
-
-
-
-# -------------------------EVA PART 1---------------->
-
-def index(request):
-    # Mostramos todos los productos (primeros 6)
-    productos_destacados = Producto.objects.all()[:6]
-    return render(request, 'mainApp/index.html', {
-        'productos_destacados': productos_destacados
-    })
-
-def catalogo(request):
-    productos = Producto.objects.all()
-    categorias = Categoria.objects.all()
-    
-    categoria_id = request.GET.get('categoria')
-    if categoria_id and categoria_id.isdigit():
-        productos = productos.filter(categoria_id=categoria_id)
-        categoria_actual = int(categoria_id)
-    else:
-        categoria_actual = None
-    
-    return render(request, 'mainApp/catalogo.html', {
-        'productos': productos,
-        'categorias': categorias,
-        'categoria_actual': categoria_actual
-    })
-
-def detalle_producto(request, pk):
-    producto = get_object_or_404(Producto, pk=pk)
-    return render(request, 'mainApp/detalle_producto.html', {'producto': producto})
-
-def solicitar_pedido(request):
-    producto_inicial = None
-    if 'producto' in request.GET:
-        prod_id = request.GET.get('producto')
-        if prod_id and prod_id.isdigit():
-            producto_inicial = get_object_or_404(Producto, pk=prod_id)
-
-    if request.method == 'POST':
-        form = SolicitudPedidoForm(request.POST, request.FILES)
-        if form.is_valid():
-            pedido = form.save()
-            request.session['nuevo_token'] = str(pedido.token)
-            return redirect('mainApp:pedido_exitoso')
-    else:
-        form = SolicitudPedidoForm(initial={'producto_referencia': producto_inicial})
-
-    return render(request, 'mainApp/solicitar_pedido.html', {'form': form})
-
-def pedido_exitoso(request):
-    token = request.session.get('nuevo_token')
-    if not token:
-        return redirect('mainApp:index')
-    
-    try:
-        pedido = Pedido.objects.get(token=token)
-    except Pedido.DoesNotExist:
-        return redirect('mainApp:index')
-    
-    return render(request, 'mainApp/pedido_exitoso.html', {'pedido': pedido})
-
-def seguimiento_pedido(request, token):
-    pedido = get_object_or_404(Pedido, token=token)
-    imagenes = pedido.imagenes_referencia.all()
-    
-    return render(request, 'mainApp/seguimiento_pedido.html', {
-        'pedido': pedido, 
-        'imagenes_referencia': imagenes
-    })
 

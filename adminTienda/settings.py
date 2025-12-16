@@ -86,21 +86,17 @@ import pymysql
 pymysql.install_as_MySQLdb()
 import MySQLdb
 
-
+# Esto es lo que falsifica la versión para que Django no se queje
 if hasattr(MySQLdb, 'version_info'):
     MySQLdb.version_info = (2, 2, 1, 'final', 0)
     MySQLdb.__version__ = '2.2.1'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'DJANGO_API',                  
-        'USER': 'root',
+        'NAME': 'django_eva4',                  
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
     }
 }
 
@@ -147,7 +143,13 @@ MEDIA_ROOT= MEDIA_DIR
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# ... (resto de tu configuración)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- PARCHES PARA MYSQL ANTIGUO ---
 from django.db.backends.mysql.base import DatabaseWrapper
 DatabaseWrapper.check_database_version_supported = lambda self: None
+
+from django.db.backends.mysql.features import DatabaseFeatures
+DatabaseFeatures.can_return_columns_from_insert = False
